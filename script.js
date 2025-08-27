@@ -202,9 +202,13 @@ class MedicationApp {
 
     // Medication Actions
     markMedicationTaken(medicationId, time) {
+        console.log('=== markMedicationTaken called ===');
+        console.log('medicationId:', medicationId, 'time:', time);
         this.recordMedicationAction(medicationId, 'taken', time);
+        console.log('=== About to refresh display ===');
         this.renderTodaysSchedule(); // Refresh the display to hide taken medication
         this.showToast('Marked as taken', 'success');
+        console.log('=== markMedicationTaken completed ===');
     }
 
     markMedicationMissed(medicationId, time) {
