@@ -203,6 +203,7 @@ class MedicationApp {
     // Medication Actions
     markMedicationTaken(medicationId, time) {
         this.recordMedicationAction(medicationId, 'taken', time);
+        this.renderTodaysSchedule(); // Refresh the display to hide taken medication
         this.showToast('Marked as taken', 'success');
     }
 
@@ -415,9 +416,8 @@ class MedicationApp {
                                     <h4 id="med-${medication.id}-${time}" class="med-name">${this.escapeHtml(medication.name)}</h4>
                                     ${medication.dosage ? `<p class="med-dosage">${this.escapeHtml(medication.dosage)}</p>` : ''}
                                 </div>
-                                <button class="med-status" onclick="app.toggleMedicationStatus('${medication.id}', '${time}')" 
-                                        aria-label="Mark ${this.escapeHtml(medication.name)} as taken"
-                                        ${this.isMedicationTakenToday(medication.id, time) ? 'class="med-status completed"' : ''}>
+                                <button class="med-status" onclick="app.markMedicationTaken('${medication.id}', '${time}')" 
+                                        aria-label="Mark ${this.escapeHtml(medication.name)} as taken">
                                 </button>
                             </div>
                         `).join('')}
@@ -426,16 +426,19 @@ class MedicationApp {
             `).join('');
     }
 
-    // Group medications by their scheduled times
+    // Group medications by their scheduled times (only show untaken medications)
     groupMedicationsByTime() {
         const timeGroups = {};
         
         this.medications.forEach(medication => {
             medication.times.forEach(time => {
-                if (!timeGroups[time]) {
-                    timeGroups[time] = [];
+                // Only include medications that haven't been taken today
+                if (!this.isMedicationTakenToday(medication.id, time)) {
+                    if (!timeGroups[time]) {
+                        timeGroups[time] = [];
+                    }
+                    timeGroups[time].push(medication);
                 }
-                timeGroups[time].push(medication);
             });
         });
         
@@ -489,9 +492,7 @@ class MedicationApp {
         const medications = timeGroups[time] || [];
         
         medications.forEach(medication => {
-            if (!this.isMedicationTakenToday(medication.id, time)) {
-                this.markMedicationTaken(medication.id, time);
-            }
+            this.recordMedicationAction(medication.id, 'taken', time);
         });
         
         this.renderTodaysSchedule();
