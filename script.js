@@ -46,7 +46,7 @@ class MedicationApp {
             this.updateCurrentDate();
             this.renderTodaysSchedule();
             this.checkNotificationPermission();
-        }, 2000);
+        }, 500); // Much faster loading
     }
 
     // Data Management - Local Storage Only
