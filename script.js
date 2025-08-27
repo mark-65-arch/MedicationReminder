@@ -43,7 +43,8 @@ class MedicationApp {
         // Simulate loading time for better UX
         setTimeout(() => {
             this.showScreen('main-menu');
-            this.renderMedications();
+            this.updateCurrentDate();
+            this.renderTodaysSchedule();
             this.checkNotificationPermission();
         }, 2000);
     }
@@ -328,9 +329,24 @@ class MedicationApp {
         }
     }
 
-    // UI Rendering
-    renderMedications() {
-        const container = document.getElementById('medications-list');
+    // Update current date display
+    updateCurrentDate() {
+        const dateElement = document.getElementById('current-date');
+        if (dateElement) {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            dateElement.textContent = now.toLocaleDateString('en-US', options);
+        }
+    }
+
+    // UI Rendering - Today's Schedule
+    renderTodaysSchedule() {
+        const container = document.getElementById('todays-schedule');
         
         if (this.medications.length === 0) {
             container.innerHTML = `
@@ -343,55 +359,125 @@ class MedicationApp {
             return;
         }
         
-        container.innerHTML = this.medications.map(medication => `
-            <div class="medication-card" role="article" aria-labelledby="med-${medication.id}-name">
-                <div class="medication-header">
-                    <div>
-                        <h3 id="med-${medication.id}-name" class="medication-name">${this.escapeHtml(medication.name)}</h3>
-                        ${medication.dosage ? `<p class="medication-dosage">${this.escapeHtml(medication.dosage)}</p>` : ''}
-                    </div>
-                    <button class="icon-btn" onclick="app.deleteMedication('${medication.id}')" 
-                            aria-label="Delete ${this.escapeHtml(medication.name)}">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="medication-times" aria-label="Scheduled times">
-                    ${medication.times.map(time => `
-                        <span class="time-badge">${this.formatTime(time)}</span>
-                    `).join('')}
-                </div>
-                
-                <div class="medication-actions">
-                    <button class="action-btn taken-btn" 
-                            onclick="app.markMedicationTaken('${medication.id}', '${medication.times[0]}')"
-                            aria-describedby="taken-help">
-                        ✅ Taken
-                    </button>
-                    <button class="action-btn missed-btn" 
-                            onclick="app.markMedicationMissed('${medication.id}', '${medication.times[0]}')"
-                            aria-describedby="missed-help">
-                        ❌ Missed
-                    </button>
-                    <button class="action-btn skip-btn" 
-                            onclick="app.markMedicationSkipped('${medication.id}', '${medication.times[0]}')"
-                            aria-describedby="skip-help">
-                        ⏭️ Skip
-                    </button>
-                </div>
-            </div>
-        `).join('');
+        // Group medications by time
+        const timeGroups = this.groupMedicationsByTime();
         
-        // Add hidden help text for screen readers
-        if (!document.getElementById('taken-help')) {
-            document.body.insertAdjacentHTML('beforeend', `
-                <div id="taken-help" class="sr-only">Mark this medication as taken on time</div>
-                <div id="missed-help" class="sr-only">Mark this medication as missed</div>
-                <div id="skip-help" class="sr-only">Skip this dose of medication</div>
-            `);
+        if (Object.keys(timeGroups).length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon" aria-hidden="true">🕐</div>
+                    <h3>No Medications Today</h3>
+                    <p>Your medication schedule will appear here.</p>
+                </div>
+            `;
+            return;
         }
+        
+        container.innerHTML = Object.entries(timeGroups)
+            .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
+            .map(([time, medications]) => `
+                <div class="time-block">
+                    <div class="time-header">
+                        <div class="time-label">
+                            <div class="time-indicator"></div>
+                            ${this.formatTime(time)}
+                        </div>
+                        ${medications.length > 1 ? `<button class="resolve-all-btn" onclick="app.resolveAllForTime('${time}')">Resolve all</button>` : ''}
+                    </div>
+                    <div class="medications-for-time">
+                        ${medications.map(medication => `
+                            <div class="med-item" role="article" aria-labelledby="med-${medication.id}-${time}">
+                                <div class="med-icon">💊</div>
+                                <div class="med-info">
+                                    <h4 id="med-${medication.id}-${time}" class="med-name">${this.escapeHtml(medication.name)}</h4>
+                                    ${medication.dosage ? `<p class="med-dosage">${this.escapeHtml(medication.dosage)}</p>` : ''}
+                                </div>
+                                <button class="med-status" onclick="app.toggleMedicationStatus('${medication.id}', '${time}')" 
+                                        aria-label="Mark ${this.escapeHtml(medication.name)} as taken"
+                                        ${this.isMedicationTakenToday(medication.id, time) ? 'class="med-status completed"' : ''}>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    // Group medications by their scheduled times
+    groupMedicationsByTime() {
+        const timeGroups = {};
+        
+        this.medications.forEach(medication => {
+            medication.times.forEach(time => {
+                if (!timeGroups[time]) {
+                    timeGroups[time] = [];
+                }
+                timeGroups[time].push(medication);
+            });
+        });
+        
+        return timeGroups;
+    }
+
+    // Check if medication was taken today for specific time
+    isMedicationTakenToday(medicationId, time) {
+        const today = new Date().toDateString();
+        return this.history.some(entry => 
+            entry.medicationId === medicationId &&
+            entry.scheduledTime === time &&
+            entry.date === today &&
+            entry.action === 'taken'
+        );
+    }
+
+    // Toggle medication status (taken/not taken)
+    toggleMedicationStatus(medicationId, time) {
+        if (this.isMedicationTakenToday(medicationId, time)) {
+            // If already taken, allow user to undo
+            this.showConfirmDialog(
+                'Undo Medication',
+                'Do you want to mark this medication as not taken?',
+                () => {
+                    this.removeMedicationRecord(medicationId, time);
+                    this.renderTodaysSchedule();
+                    this.showToast('Medication unmarked', 'success');
+                }
+            );
+        } else {
+            this.markMedicationTaken(medicationId, time);
+            this.renderTodaysSchedule();
+        }
+    }
+
+    // Remove medication record for today
+    removeMedicationRecord(medicationId, time) {
+        const today = new Date().toDateString();
+        this.history = this.history.filter(entry => 
+            !(entry.medicationId === medicationId &&
+              entry.scheduledTime === time &&
+              entry.date === today)
+        );
+        this.saveData();
+    }
+
+    // Resolve all medications for a specific time
+    resolveAllForTime(time) {
+        const timeGroups = this.groupMedicationsByTime();
+        const medications = timeGroups[time] || [];
+        
+        medications.forEach(medication => {
+            if (!this.isMedicationTakenToday(medication.id, time)) {
+                this.markMedicationTaken(medication.id, time);
+            }
+        });
+        
+        this.renderTodaysSchedule();
+        this.showToast(`All medications for ${this.formatTime(time)} marked as taken`, 'success');
+    }
+
+    // Legacy method for backward compatibility
+    renderMedications() {
+        this.renderTodaysSchedule();
     }
 
     renderHistory() {
@@ -604,6 +690,14 @@ class MedicationApp {
             this.renderHistory();
         });
         
+        // Add manage medications button handler
+        const manageMedsBtn = document.getElementById('manage-meds-btn');
+        if (manageMedsBtn) {
+            manageMedsBtn.addEventListener('click', () => {
+                this.showMedicationManagement();
+            });
+        }
+        
         document.getElementById('backup-btn').addEventListener('click', () => {
             this.exportData();
         });
@@ -677,7 +771,7 @@ class MedicationApp {
         });
     }
 
-    // Utility Functions
+    // Show medication management screen (placeholder for now)\n    showMedicationManagement() {\n        // For now, just show a toast - in future this could be a dedicated management screen\n        this.showToast('Medication management coming soon', 'success');\n    }\n\n    // Utility Functions
     showToast(message, type = 'info') {
         const toast = document.getElementById('toast');
         toast.textContent = message;
