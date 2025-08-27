@@ -1,0 +1,146 @@
+# Master Requirements Checklist - Senior Medication App
+
+## DESIGN REQUIREMENTS (Check EVERY UI element)
+
+### Typography
+- [ ] Body text minimum 18sp
+- [ ] Headings minimum 24sp  
+- [ ] Button text minimum 18sp, bold weight
+- [ ] No text smaller than 16sp anywhere
+- [ ] Line height 1.4x minimum for readability
+
+### Touch Targets
+- [ ] All interactive elements minimum 56dp
+- [ ] Buttons minimum 56dp height, 120dp width
+- [ ] Spacing between touch targets minimum 8dp
+- [ ] Cards minimum 120dp height
+
+### Colors (High Contrast)
+- [ ] Primary: #1565C0 (Dark Blue)
+- [ ] Secondary: #2E7D32 (Dark Green)
+- [ ] Error: #D32F2F (Clear Red)
+- [ ] Background: #FAFAFA (Off-white)
+- [ ] Text: #212121 (Near black)
+- [ ] Contrast ratio 7:1 for normal text, 4.5:1 for large text
+
+### Spacing
+- [ ] Card padding minimum 24dp
+- [ ] Screen margins minimum 16dp
+- [ ] Element spacing minimum 16dp
+- [ ] Section spacing minimum 32dp
+
+### Navigation
+- [ ] Maximum 3 primary actions per screen
+- [ ] Linear navigation flow only
+- [ ] Back button clearly visible and labeled
+- [ ] No hamburger menus or hidden navigation
+
+## PRIVACY REQUIREMENTS (ABSOLUTE COMPLIANCE)
+
+### Data Storage
+- [ ] ALL data in Room Database (local SQLite)
+- [ ] NO cloud storage or syncing
+- [ ] NO external APIs except Android system APIs
+- [ ] NO analytics or crash reporting services
+- [ ] NO user tracking or telemetry
+
+### Data Export
+- [ ] Local file export only (JSON to Downloads)
+- [ ] User-initiated backup only
+- [ ] Clear data deletion options
+- [ ] No automatic data sharing
+
+## ACCESSIBILITY REQUIREMENTS (MANDATORY)
+
+### TalkBack Support  
+- [ ] ContentDescription on ALL interactive elements
+- [ ] Semantic roles defined (Button, Heading, etc.)
+- [ ] Reading order logical and intuitive
+- [ ] Focus indicators clearly visible
+
+### Visual Accessibility
+- [ ] High contrast mode available
+- [ ] Text scaling support (up to 200%)
+- [ ] Color not sole indicator of state
+- [ ] Clear visual hierarchy
+
+### Input Methods
+- [ ] Voice input available where appropriate
+- [ ] Keyboard navigation support
+- [ ] Switch control compatibility
+- [ ] Simple gesture support only
+
+## FUNCTIONAL REQUIREMENTS
+
+### Notification System
+- [ ] AlarmManager for exact timing
+- [ ] Persistent notifications until interaction
+- [ ] Large action buttons in notifications
+- [ ] Sound + vibration options
+- [ ] Battery optimization guidance
+
+### Core Features Only
+- [ ] Add/edit medications
+- [ ] Reminder notifications  
+- [ ] Mark taken/missed/skipped
+- [ ] Simple history view
+- [ ] Basic settings only
+- [ ] Local backup/restore
+
+### Error Handling
+- [ ] Senior-friendly error messages
+- [ ] Clear recovery actions
+- [ ] No technical jargon
+- [ ] Large, visible error indicators
+
+## VALIDATION TESTS (Run for EVERY feature)
+
+### Manual Testing
+- [ ] Test with TalkBack enabled
+- [ ] Test with large text scaling
+- [ ] Test with high contrast mode
+- [ ] Test on older Android devices
+- [ ] Test battery optimization scenarios
+
+### Code Quality
+- [ ] No hardcoded strings (use resources)
+- [ ] Proper error handling throughout
+- [ ] Memory leak prevention
+- [ ] Offline functionality verified
+- [ ] No network permissions in manifest
+
+### Senior User Experience
+- [ ] Can complete task in under 5 minutes
+- [ ] No more than 3 taps for primary actions
+- [ ] Clear visual feedback for all actions
+- [ ] Undo/cancel options where needed
+- [ ] Help text in plain language
+
+## ARCHITECTURE REQUIREMENTS
+
+### Database
+- [ ] Room Database with proper migrations
+- [ ] Type converters for complex data
+- [ ] Proper indexing for performance
+- [ ] Data validation in entities
+
+### UI Architecture
+- [ ] MVVM with ViewModels
+- [ ] Jetpack Compose with state management
+- [ ] Proper lifecycle handling
+- [ ] Memory efficient implementations
+
+### Build Configuration
+- [ ] Minimum SDK 24, Target SDK 34
+- [ ] Proper ProGuard/R8 rules
+- [ ] No debug information in release
+- [ ] Proper signing configuration
+
+## COMPLETION CRITERIA
+
+Each feature is complete only when:
+- [ ] All above requirements are met
+- [ ] Manual testing completed
+- [ ] Accessibility testing passed
+- [ ] Code review against checklist done
+- [ ] Documentation updated
