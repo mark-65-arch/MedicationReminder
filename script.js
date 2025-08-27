@@ -231,8 +231,10 @@ class MedicationApp {
             date: new Date().toDateString()
         };
 
+        console.log('Recording medication action:', historyEntry);
         this.history.push(historyEntry);
         this.saveData();
+        console.log('Updated history:', this.history);
         
         // Update UI if on history screen
         if (this.currentScreen === 'history') {
@@ -448,12 +450,15 @@ class MedicationApp {
     // Check if medication was taken today for specific time
     isMedicationTakenToday(medicationId, time) {
         const today = new Date().toDateString();
-        return this.history.some(entry => 
+        const taken = this.history.some(entry => 
             entry.medicationId === medicationId &&
             entry.scheduledTime === time &&
             entry.date === today &&
             entry.action === 'taken'
         );
+        console.log(`Checking if medication ${medicationId} at ${time} was taken today (${today}):`, taken);
+        console.log('History entries for today:', this.history.filter(entry => entry.date === today));
+        return taken;
     }
 
     // Toggle medication status (taken/not taken)
