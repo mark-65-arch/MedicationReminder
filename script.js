@@ -702,84 +702,85 @@ class MedicationApp {
 
     // Event Listeners Setup
     setupEventListeners() {
+        // Helper function to safely add event listeners
+        const addListener = (id, event, handler) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener(event, handler);
+            }
+        };
+
         // Navigation
-        document.getElementById('add-med-btn').addEventListener('click', () => {
+        addListener('add-med-btn', 'click', () => {
             this.showScreen('add-medication');
             this.setupMedicationForm();
         });
         
-        document.getElementById('view-history-btn').addEventListener('click', () => {
+        addListener('view-history-btn', 'click', () => {
             this.showScreen('history');
             this.renderHistory();
         });
         
         // Add manage medications button handler
-        const manageMedsBtn = document.getElementById('manage-meds-btn');
-        if (manageMedsBtn) {
-            manageMedsBtn.addEventListener('click', () => {
-                this.showMedicationManagement();
-            });
-        }
-        
-        document.getElementById('backup-btn').addEventListener('click', () => {
-            this.exportData();
+        addListener('manage-meds-btn', 'click', () => {
+            this.showMedicationManagement();
         });
         
-        document.getElementById('settings-btn').addEventListener('click', () => {
+        addListener('settings-btn', 'click', () => {
             this.showScreen('settings');
         });
         
         // Back buttons
-        document.getElementById('back-from-add').addEventListener('click', () => {
+        addListener('back-from-add', 'click', () => {
             this.showScreen('main-menu');
         });
         
-        document.getElementById('back-from-history').addEventListener('click', () => {
+        addListener('back-from-history', 'click', () => {
             this.showScreen('main-menu');
         });
         
-        document.getElementById('back-from-settings').addEventListener('click', () => {
+        addListener('back-from-settings', 'click', () => {
             this.showScreen('main-menu');
         });
         
         // Form buttons
-        document.getElementById('cancel-add').addEventListener('click', () => {
+        addListener('cancel-add', 'click', () => {
             this.showScreen('main-menu');
         });
         
         // Settings
-        document.getElementById('sound-enabled').addEventListener('change', (e) => {
+        addListener('sound-enabled', 'change', (e) => {
             this.settings.soundEnabled = e.target.checked;
             this.saveData();
         });
         
-        document.getElementById('vibration-enabled').addEventListener('change', (e) => {
+        addListener('vibration-enabled', 'change', (e) => {
             this.settings.vibrationEnabled = e.target.checked;
             this.saveData();
         });
         
-        document.getElementById('high-contrast').addEventListener('change', (e) => {
+        addListener('high-contrast', 'change', (e) => {
             this.settings.highContrast = e.target.checked;
             this.saveData();
             this.applySettings();
         });
         
-        document.getElementById('text-size').addEventListener('change', (e) => {
+        addListener('text-size', 'change', (e) => {
             this.settings.textSize = e.target.value;
             this.saveData();
             this.applySettings();
         });
         
         // Data management
-        document.getElementById('export-data').addEventListener('click', () => {
+        addListener('export-data', 'click', () => {
             this.exportData();
         });
         
-        document.getElementById('import-data').addEventListener('click', () => {
+        addListener('import-data', 'click', () => {
             this.importData();
         });
         
-        document.getElementById('clear-data').addEventListener('click', () => {
+        addListener('clear-data', 'click', () => {
             this.clearAllData();
         });
         
@@ -794,7 +795,13 @@ class MedicationApp {
         });
     }
 
-    // Show medication management screen (placeholder for now)\n    showMedicationManagement() {\n        // For now, just show a toast - in future this could be a dedicated management screen\n        this.showToast('Medication management coming soon', 'success');\n    }\n\n    // Utility Functions
+    // Show medication management screen (placeholder for now)
+    showMedicationManagement() {
+        // For now, just show a toast - in future this could be a dedicated management screen
+        this.showToast('Medication management coming soon', 'success');
+    }
+
+    // Utility Functions
     showToast(message, type = 'info') {
         const toast = document.getElementById('toast');
         toast.textContent = message;
