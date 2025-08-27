@@ -42,11 +42,34 @@ class MedicationApp {
         
         // Simulate loading time for better UX
         setTimeout(() => {
+            console.log('Switching to main menu...');
             this.showScreen('main-menu');
-            this.updateCurrentDate();
-            this.renderTodaysSchedule();
+            
+            // Try to update date safely
+            try {
+                const dateElement = document.getElementById('current-date');
+                if (dateElement) {
+                    const now = new Date();
+                    dateElement.textContent = now.toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                }
+            } catch (e) {
+                console.log('Date update failed:', e);
+            }
+            
+            // Use basic medication rendering
+            try {
+                this.renderMedications();
+            } catch (e) {
+                console.log('Medication rendering failed:', e);
+            }
+            
             this.checkNotificationPermission();
-        }, 500); // Much faster loading
+        }, 500);
     }
 
     // Data Management - Local Storage Only
