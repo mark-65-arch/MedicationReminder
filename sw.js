@@ -1,7 +1,7 @@
 // Service Worker for Senior Medication App
 // Provides offline functionality and PWA capabilities
 
-const CACHE_NAME = 'senior-med-tracker-v1';
+const CACHE_NAME = 'senior-med-tracker-v2';
 const urlsToCache = [
     './',
     './index.html',
