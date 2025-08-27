@@ -385,19 +385,28 @@ class MedicationApp {
             return;
         }
         
-        // Group medications by time
-        const timeGroups = this.groupMedicationsByTime();
+        // Create a simple list of untaken medications
+        const untakenMedications = this.getUntakenMedicationsForToday();
         
-        if (Object.keys(timeGroups).length === 0) {
+        if (untakenMedications.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon" aria-hidden="true">🕐</div>
-                    <h3>No Medications Today</h3>
-                    <p>Your medication schedule will appear here.</p>
+                    <div class="empty-state-icon" aria-hidden="true">✅</div>
+                    <h3>All Done for Today!</h3>
+                    <p>You've taken all your medications for today. Great job!</p>
                 </div>
             `;
             return;
         }
+        
+        // Group by time
+        const timeGroups = {};
+        untakenMedications.forEach(item => {
+            if (!timeGroups[item.time]) {
+                timeGroups[item.time] = [];
+            }
+            timeGroups[item.time].push(item.medication);
+        });
         
         container.innerHTML = Object.entries(timeGroups)
             .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
@@ -426,6 +435,36 @@ class MedicationApp {
                     </div>
                 </div>
             `).join('');
+    }
+
+    // Get all untaken medications for today
+    getUntakenMedicationsForToday() {
+        const today = new Date().toDateString();
+        const untakenMedications = [];
+        
+        this.medications.forEach(medication => {
+            medication.times.forEach(time => {
+                // Check if this specific medication at this specific time was taken today
+                const wasTaken = this.history.some(entry => 
+                    entry.medicationId === medication.id &&
+                    entry.scheduledTime === time &&
+                    entry.date === today &&
+                    entry.action === 'taken'
+                );
+                
+                console.log(`Medication: ${medication.name}, Time: ${time}, Taken today: ${wasTaken}`);
+                
+                if (!wasTaken) {
+                    untakenMedications.push({
+                        medication: medication,
+                        time: time
+                    });
+                }
+            });
+        });
+        
+        console.log('Untaken medications:', untakenMedications);
+        return untakenMedications;
     }
 
     // Group medications by their scheduled times (only show untaken medications)
