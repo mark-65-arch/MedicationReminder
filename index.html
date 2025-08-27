@@ -47,6 +47,10 @@
                 </button>
                 
                 <div class="secondary-actions">
+                    <button id="upcoming-schedule-btn" class="secondary-action-btn" aria-describedby="upcoming-help">
+                        <span class="action-icon" aria-hidden="true">📅</span>
+                        <span class="action-text">Upcoming</span>
+                    </button>
                     <button id="view-history-btn" class="secondary-action-btn" aria-describedby="history-help">
                         <span class="action-icon" aria-hidden="true">📊</span>
                         <span class="action-text">Records</span>
@@ -113,6 +117,41 @@
                     </button>
                 </div>
             </form>
+        </main>
+    </div>
+
+    <!-- Upcoming Schedule Screen -->
+    <div id="upcoming-schedule" class="screen">
+        <header class="app-header">
+            <button id="back-from-upcoming" class="back-btn" aria-label="Go back to main menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </button>
+            <h1>Upcoming Schedule</h1>
+        </header>
+
+        <main class="main-content">
+            <div class="week-navigation">
+                <button id="prev-week" class="week-nav-btn" aria-label="Previous week">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                    </svg>
+                    Previous
+                </button>
+                <span id="week-display" class="week-display">This Week</span>
+                <button id="next-week" class="week-nav-btn" aria-label="Next week">
+                    Next
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="weekly-schedule" class="weekly-schedule">
+                <!-- Daily cards will be populated here -->
+            </div>
         </main>
     </div>
 
@@ -244,6 +283,7 @@
 
     <!-- Hidden Help Text for Screen Readers -->
     <div id="add-med-help" class="sr-only">Tap to add a new medication with reminders</div>
+    <div id="upcoming-help" class="sr-only">View your medication schedule for the upcoming week</div>
     <div id="history-help" class="sr-only">View your medication history and records</div>
     <div id="manage-help" class="sr-only">Manage your existing medications</div>
 

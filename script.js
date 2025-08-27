@@ -14,6 +14,7 @@ class MedicationApp {
         
         this.currentScreen = 'loading-screen';
         this.notificationPermission = false;
+        this.currentWeekOffset = 0; // 0 = this week, 1 = next week, -1 = last week
         
         this.init();
     }
@@ -771,6 +772,11 @@ class MedicationApp {
             this.setupMedicationForm();
         });
         
+        addListener('upcoming-schedule-btn', 'click', () => {
+            this.showScreen('upcoming-schedule');
+            this.initializeUpcomingSchedule();
+        });
+        
         addListener('view-history-btn', 'click', () => {
             this.showScreen('history');
             this.renderHistory();
@@ -794,8 +800,21 @@ class MedicationApp {
             this.showScreen('main-menu');
         });
         
+        addListener('back-from-upcoming', 'click', () => {
+            this.showScreen('main-menu');
+        });
+        
         addListener('back-from-settings', 'click', () => {
             this.showScreen('main-menu');
+        });
+        
+        // Week navigation for upcoming schedule
+        addListener('prev-week', 'click', () => {
+            this.navigateWeek(-1);
+        });
+        
+        addListener('next-week', 'click', () => {
+            this.navigateWeek(1);
         });
         
         // Form buttons
@@ -848,6 +867,139 @@ class MedicationApp {
                 }
             }
         });
+    }
+
+    // Upcoming Schedule Functions
+    initializeUpcomingSchedule() {
+        this.currentWeekOffset = 0;
+        this.renderUpcomingSchedule();
+        this.updateWeekDisplay();
+    }
+
+    navigateWeek(direction) {
+        this.currentWeekOffset += direction;
+        this.renderUpcomingSchedule();
+        this.updateWeekDisplay();
+    }
+
+    updateWeekDisplay() {
+        const weekDisplay = document.getElementById('week-display');
+        if (!weekDisplay) return;
+
+        if (this.currentWeekOffset === 0) {
+            weekDisplay.textContent = 'This Week';
+        } else if (this.currentWeekOffset === 1) {
+            weekDisplay.textContent = 'Next Week';
+        } else if (this.currentWeekOffset === -1) {
+            weekDisplay.textContent = 'Last Week';
+        } else if (this.currentWeekOffset > 1) {
+            weekDisplay.textContent = `${this.currentWeekOffset} weeks ahead`;
+        } else {
+            weekDisplay.textContent = `${Math.abs(this.currentWeekOffset)} weeks ago`;
+        }
+    }
+
+    renderUpcomingSchedule() {
+        const container = document.getElementById('weekly-schedule');
+        if (!container) return;
+
+        if (this.medications.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon" aria-hidden="true">💊</div>
+                    <h3>No Medications Added</h3>
+                    <p>Add medications to see your upcoming schedule here.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Calculate the start of the week (Sunday)
+        const today = new Date();
+        const currentDayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - currentDayOfWeek + (this.currentWeekOffset * 7));
+
+        // Generate 7 days starting from startOfWeek
+        const days = [];
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(startOfWeek);
+            date.setDate(startOfWeek.getDate() + i);
+            days.push(date);
+        }
+
+        container.innerHTML = days.map(date => this.renderDayCard(date)).join('');
+    }
+
+    renderDayCard(date) {
+        const today = new Date();
+        const isToday = date.toDateString() === today.toDateString();
+        const isPast = date < today && !isToday;
+        
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayName = dayNames[date.getDay()];
+        const dayDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        // Get medications for this day
+        const dayMedications = this.getMedicationsForDay(date);
+
+        return `
+            <div class="day-card ${isToday ? 'today' : ''} ${isPast ? 'past' : ''}" role="article" aria-labelledby="day-${date.getTime()}">
+                <div class="day-header">
+                    <div>
+                        <div id="day-${date.getTime()}" class="day-name">${dayName}</div>
+                        <div class="day-date">${dayDate}</div>
+                    </div>
+                    ${isToday ? '<div class="day-today-indicator">Today</div>' : ''}
+                </div>
+                
+                <div class="day-medications">
+                    ${dayMedications.length > 0 ? this.renderDayMedications(dayMedications) : 
+                      '<div class="no-medications-day">No medications scheduled</div>'}
+                </div>
+            </div>
+        `;
+    }
+
+    getMedicationsForDay(date) {
+        // For simplicity, all medications are scheduled every day
+        // In a more advanced version, this could handle different scheduling patterns
+        const timeGroups = {};
+
+        this.medications.forEach(medication => {
+            medication.times.forEach(time => {
+                if (!timeGroups[time]) {
+                    timeGroups[time] = [];
+                }
+                timeGroups[time].push(medication);
+            });
+        });
+
+        return Object.entries(timeGroups)
+            .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
+            .map(([time, medications]) => ({ time, medications }));
+    }
+
+    renderDayMedications(timeGroups) {
+        return timeGroups.map(({ time, medications }) => `
+            <div class="medication-time-group">
+                <div class="time-label-upcoming">
+                    <div class="time-indicator-upcoming"></div>
+                    ${this.formatTime(time)}
+                </div>
+                <div class="upcoming-med-list">
+                    ${medications.map(medication => `
+                        <div class="upcoming-med-item">
+                            <div class="upcoming-med-icon">💊</div>
+                            <div>
+                                <div class="upcoming-med-name">${this.escapeHtml(medication.name)}</div>
+                                ${medication.dosage ? `<div class="upcoming-med-dosage">${this.escapeHtml(medication.dosage)}</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
     }
 
     // Show medication management screen (placeholder for now)

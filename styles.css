@@ -921,6 +921,175 @@ body {
   top: 6px;
 }
 
+/* Upcoming Schedule Styles */
+.week-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-sm);
+  background-color: var(--card-background);
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+}
+
+.week-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 8px;
+  font-size: var(--button-font-size);
+  font-weight: bold;
+  min-height: var(--touch-target-min);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.week-nav-btn:hover,
+.week-nav-btn:focus {
+  background-color: var(--secondary-color);
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.week-display {
+  font-size: var(--heading-font-size);
+  font-weight: bold;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.weekly-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.day-card {
+  background-color: var(--card-background);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: var(--spacing-md);
+  min-height: var(--card-min-height);
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.day-card.today {
+  border-color: var(--primary-color);
+  background-color: #E3F2FD;
+  border-width: 3px;
+}
+
+.day-card.past {
+  opacity: 0.7;
+  background-color: #F5F5F5;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.day-name {
+  font-size: var(--heading-font-size);
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.day-date {
+  font-size: var(--body-font-size);
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.day-today-indicator {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: var(--small-font-size);
+  font-weight: bold;
+}
+
+.day-medications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.medication-time-group {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-sm);
+}
+
+.time-label-upcoming {
+  font-size: var(--body-font-size);
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.time-indicator-upcoming {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--secondary-color);
+}
+
+.upcoming-med-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.upcoming-med-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs);
+  background-color: #FAFAFA;
+  border-radius: 6px;
+}
+
+.upcoming-med-icon {
+  font-size: 20px;
+}
+
+.upcoming-med-name {
+  font-size: var(--body-font-size);
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.upcoming-med-dosage {
+  font-size: var(--small-font-size);
+  color: var(--text-color);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.no-medications-day {
+  text-align: center;
+  padding: var(--spacing-md);
+  color: var(--text-color);
+  opacity: 0.6;
+  font-style: italic;
+}
+
 /* Screen Reader Only Content */
 .sr-only {
   position: absolute;
