@@ -1,0 +1,76 @@
+{
+  "name": "Senior Med Tracker",
+  "short_name": "MedTracker",
+  "description": "Privacy-focused medication management app designed specifically for seniors with comprehensive accessibility features",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1565C0",
+  "background_color": "#FAFAFA",
+  "scope": "./",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["health", "medical", "productivity"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' fill='%231565C0'><rect width='192' height='192' fill='%23FAFAFA'/><path d='M96 32c-8.8 0-16 7.2-16 16v32H48c-8.8 0-16 7.2-16 16s7.2 16 16 16h32v32c0 8.8 7.2 16 16 16s16-7.2 16-16v-32h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32V48c0-8.8-7.2-16-16-16z'/><circle cx='64' cy='128' r='8' fill='%232E7D32'/><circle cx='64' cy='152' r='8' fill='%232E7D32'/><circle cx='64' cy='176' r='8' fill='%232E7D32'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%231565C0'><rect width='512' height='512' fill='%23FAFAFA'/><path d='M256 85.3c-23.5 0-42.7 19.2-42.7 42.7v85.3H128c-23.5 0-42.7 19.2-42.7 42.7s19.2 42.7 42.7 42.7h85.3v85.3c0 23.5 19.2 42.7 42.7 42.7s42.7-19.2 42.7-42.7v-85.3H384c23.5 0 42.7-19.2 42.7-42.7S407.5 213.3 384 213.3h-85.3V128c0-23.5-19.2-42.7-42.7-42.7z'/><circle cx='171' cy='341' r='21' fill='%232E7D32'/><circle cx='171' cy='405' r='21' fill='%232E7D32'/><circle cx='171' cy='469' r='21' fill='%232E7D32'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' fill='%23FFFFFF'><rect width='192' height='192' fill='%231565C0'/><path d='M96 32c-8.8 0-16 7.2-16 16v32H48c-8.8 0-16 7.2-16 16s7.2 16 16 16h32v32c0 8.8 7.2 16 16 16s16-7.2 16-16v-32h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32V48c0-8.8-7.2-16-16-16z'/><circle cx='64' cy='128' r='8' fill='%2300E676'/><circle cx='64' cy='152' r='8' fill='%2300E676'/><circle cx='64' cy='176' r='8' fill='%2300E676'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Medication",
+      "short_name": "Add Med",
+      "description": "Quickly add a new medication",
+      "url": "./?action=add",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96' fill='%232E7D32'><path d='M48 16c-4.4 0-8 3.6-8 8v16H24c-4.4 0-8 3.6-8 8s3.6 8 8 8h16v16c0 4.4 3.6 8 8 8s8-3.6 8-8V56h16c4.4 0 8-3.6 8-8s-3.6-8-8-8H56V24c0-4.4-3.6-8-8-8z'/></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "View History",
+      "short_name": "History",
+      "description": "View medication history",
+      "url": "./?action=history",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96' fill='%231565C0'><path d='M76 20H20c-4.4 0-8 3.6-8 8v40c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V28c0-4.4-3.6-8-8-8zM28 36h40v8H28v-8zm0 16h40v8H28v-8z'/></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "features": [
+    "offline-storage",
+    "accessibility",
+    "notification",
+    "local-data-only"
+  ],
+  "privacy_policy": "This app stores all data locally on your device. No data is transmitted to external servers or third parties.",
+  "permissions": [
+    "notifications"
+  ],
+  "prefer_related_applications": false,
+  "iarc_rating_id": "e58c174a-81d2-5c3c-32cc-34b8de4a52e9"
+}

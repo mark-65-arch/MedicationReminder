@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Med Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1565C0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231565C0'><path d='M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3V8zM4 6h5v2H4V6zm0 4h5v2H4v-2zm0 4h5v2H4v-2z'/></svg>">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen active" aria-live="polite">
+        <div class="loading-content">
+            <div class="loading-icon" aria-hidden="true">💊</div>
+            <h1>Senior Med Tracker</h1>
+            <p>Loading your medications...</p>
+        </div>
+    </div>
+
+    <!-- Main Menu Screen -->
+    <div id="main-menu" class="screen">
+        <header class="app-header">
+            <h1>My Medications</h1>
+            <button id="settings-btn" class="icon-btn" aria-label="Open Settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                </svg>
+            </button>
+        </header>
+
+        <main class="main-content">
+            <div id="medications-list" class="medications-container">
+                <!-- Medications will be populated here -->
+            </div>
+
+            <div class="primary-actions">
+                <button id="add-med-btn" class="primary-btn" aria-describedby="add-med-help">
+                    <span class="btn-icon" aria-hidden="true">➕</span>
+                    Add Medication
+                </button>
+                <p id="add-med-help" class="help-text">Tap to add a new medication with reminders</p>
+
+                <button id="view-history-btn" class="secondary-btn" aria-describedby="history-help">
+                    <span class="btn-icon" aria-hidden="true">📋</span>
+                    View History
+                </button>
+                <p id="history-help" class="help-text">See when you took your medications</p>
+
+                <button id="backup-btn" class="secondary-btn" aria-describedby="backup-help">
+                    <span class="btn-icon" aria-hidden="true">💾</span>
+                    Backup Data
+                </button>
+                <p id="backup-help" class="help-text">Save your medication data to a file</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Medication Screen -->
+    <div id="add-medication" class="screen">
+        <header class="app-header">
+            <button id="back-from-add" class="back-btn" aria-label="Go back to main menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </button>
+            <h1>Add Medication</h1>
+        </header>
+
+        <main class="main-content">
+            <form id="medication-form" class="med-form">
+                <div class="form-group">
+                    <label for="med-name" class="form-label">Medication Name *</label>
+                    <input type="text" id="med-name" class="form-input" required aria-describedby="name-help">
+                    <p id="name-help" class="help-text">Enter the name of your medication</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="med-dosage" class="form-label">Dosage</label>
+                    <input type="text" id="med-dosage" class="form-input" placeholder="e.g., 10mg" aria-describedby="dosage-help">
+                    <p id="dosage-help" class="help-text">Optional: Enter the dosage amount</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="med-times" class="form-label">Times per Day *</label>
+                    <select id="med-times" class="form-select" required aria-describedby="times-help">
+                        <option value="">Select times per day</option>
+                        <option value="1">Once daily</option>
+                        <option value="2">Twice daily</option>
+                        <option value="3">Three times daily</option>
+                        <option value="4">Four times daily</option>
+                    </select>
+                    <p id="times-help" class="help-text">How many times per day do you take this medication?</p>
+                </div>
+
+                <div id="time-slots" class="time-slots">
+                    <!-- Time inputs will be added dynamically -->
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="primary-btn">
+                        <span class="btn-icon" aria-hidden="true">✅</span>
+                        Save Medication
+                    </button>
+                    <button type="button" id="cancel-add" class="secondary-btn">
+                        <span class="btn-icon" aria-hidden="true">❌</span>
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- History Screen -->
+    <div id="history" class="screen">
+        <header class="app-header">
+            <button id="back-from-history" class="back-btn" aria-label="Go back to main menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </button>
+            <h1>Medication History</h1>
+        </header>
+
+        <main class="main-content">
+            <div id="history-list" class="history-container">
+                <!-- History entries will be populated here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settings" class="screen">
+        <header class="app-header">
+            <button id="back-from-settings" class="back-btn" aria-label="Go back to main menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </button>
+            <h1>Settings</h1>
+        </header>
+
+        <main class="main-content">
+            <div class="settings-section">
+                <h2>Notification Settings</h2>
+                
+                <div class="setting-item">
+                    <label class="setting-label">
+                        <input type="checkbox" id="sound-enabled" class="setting-checkbox">
+                        <span class="setting-text">Enable Sound</span>
+                    </label>
+                    <p class="help-text">Play a sound when reminders appear</p>
+                </div>
+
+                <div class="setting-item">
+                    <label class="setting-label">
+                        <input type="checkbox" id="vibration-enabled" class="setting-checkbox">
+                        <span class="setting-text">Enable Vibration</span>
+                    </label>
+                    <p class="help-text">Vibrate device for reminders</p>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>Display Settings</h2>
+                
+                <div class="setting-item">
+                    <label class="setting-label">
+                        <input type="checkbox" id="high-contrast" class="setting-checkbox">
+                        <span class="setting-text">High Contrast Mode</span>
+                    </label>
+                    <p class="help-text">Increase contrast for better visibility</p>
+                </div>
+
+                <div class="setting-item">
+                    <label for="text-size" class="setting-label">Text Size</label>
+                    <select id="text-size" class="form-select">
+                        <option value="normal">Normal</option>
+                        <option value="large">Large</option>
+                        <option value="extra-large">Extra Large</option>
+                    </select>
+                    <p class="help-text">Adjust text size for comfort</p>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>Data Management</h2>
+                
+                <button id="export-data" class="secondary-btn">
+                    <span class="btn-icon" aria-hidden="true">📤</span>
+                    Export Data
+                </button>
+                <p class="help-text">Download your medication data</p>
+
+                <button id="import-data" class="secondary-btn">
+                    <span class="btn-icon" aria-hidden="true">📥</span>
+                    Import Data
+                </button>
+                <p class="help-text">Load medication data from a file</p>
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+
+                <button id="clear-data" class="danger-btn">
+                    <span class="btn-icon" aria-hidden="true">🗑️</span>
+                    Clear All Data
+                </button>
+                <p class="help-text">Delete all medications and history</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Permission Modal -->
+    <div id="notification-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <h2 id="modal-title">Enable Notifications</h2>
+            <p>To receive medication reminders, please allow notifications for this app.</p>
+            <div class="modal-actions">
+                <button id="enable-notifications" class="primary-btn">Enable Notifications</button>
+                <button id="skip-notifications" class="secondary-btn">Skip for Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal" role="dialog" aria-labelledby="confirm-title" aria-hidden="true">
+        <div class="modal-content">
+            <h2 id="confirm-title">Confirm Action</h2>
+            <p id="confirm-message"></p>
+            <div class="modal-actions">
+                <button id="confirm-yes" class="primary-btn">Yes</button>
+                <button id="confirm-no" class="secondary-btn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert/Toast Messages -->
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-hidden="true"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
