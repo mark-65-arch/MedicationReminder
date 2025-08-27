@@ -434,16 +434,22 @@ class MedicationApp {
         
         this.medications.forEach(medication => {
             medication.times.forEach(time => {
+                console.log(`Processing medication ${medication.name} (${medication.id}) at time ${time}`);
                 // Only include medications that haven't been taken today
-                if (!this.isMedicationTakenToday(medication.id, time)) {
+                const isTaken = this.isMedicationTakenToday(medication.id, time);
+                console.log(`Is ${medication.name} taken at ${time}? ${isTaken}`);
+                if (!isTaken) {
                     if (!timeGroups[time]) {
                         timeGroups[time] = [];
                     }
                     timeGroups[time].push(medication);
+                } else {
+                    console.log(`Excluding ${medication.name} from display because it was taken`);
                 }
             });
         });
         
+        console.log('Final time groups:', timeGroups);
         return timeGroups;
     }
 
