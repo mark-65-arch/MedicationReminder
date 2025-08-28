@@ -1,16 +1,19 @@
 /* Senior Medication App Styles - Following Accessibility Guidelines */
 
 :root {
-  /* Color Palette - High Contrast as per requirements */
-  --primary-color: #1565C0; /* Dark Blue */
-  --secondary-color: #2E7D32; /* Dark Green */
-  --error-color: #D32F2F; /* Clear Red */
-  --background-color: #FAFAFA; /* Off-white */
-  --text-color: #212121; /* Near black */
-  --card-background: #FFFFFF;
-  --border-color: #E0E0E0;
-  --focus-color: #2196F3;
-  --disabled-color: #9E9E9E;
+  /* Warm Pastel Color Palette */
+  --primary-color: #8B7EC8; /* Soft lavender */
+  --secondary-color: #A8C9A4; /* Sage green */
+  --error-color: #E8A5A5; /* Soft coral */
+  --background-color: #FAF8F5; /* Warm cream */
+  --text-color: #5D5A6B; /* Soft charcoal */
+  --card-background: #FEFDFB; /* Off-white */
+  --border-color: #E8E4E0; /* Warm light gray */
+  --focus-color: #9B8ECE; /* Light lavender */
+  --disabled-color: #B8B3C1; /* Soft gray-purple */
+  --accent-color: #F4B5A2; /* Warm peach */
+  --success-color: #A8C9A4; /* Sage green */
+  --warning-color: #F4D03F; /* Soft yellow */
   
   /* Typography - Minimum sizes as per requirements */
   --body-font-size: 18px; /* Minimum 18sp */
@@ -34,11 +37,11 @@
 
 /* High Contrast Mode */
 body.high-contrast {
-  --primary-color: #0D47A1;
-  --secondary-color: #1B5E20;
+  --primary-color: #6B5B95; /* Deeper lavender */
+  --secondary-color: #7A9B76; /* Deeper sage */
   --background-color: #FFFFFF;
-  --text-color: #000000;
-  --border-color: #000000;
+  --text-color: #2D2A3D; /* Deeper charcoal */
+  --border-color: #5D5A6B;
 }
 
 /* Text Size Variants */
@@ -78,7 +81,7 @@ body {
   min-height: 100vh;
   padding: var(--spacing-sm);
   padding-bottom: var(--spacing-xl);
-  background-color: #F8F9FA;
+  background-color: var(--background-color);
 }
 
 .screen.active {
@@ -91,7 +94,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1565C0 0%, #2E7D32 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 }
 
 .loading-content {
@@ -116,7 +119,7 @@ body {
 
 /* Header Styles */
 .main-header {
-  background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   color: white;
   padding: var(--spacing-md) var(--spacing-sm);
   margin: calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm)) var(--spacing-md) calc(-1 * var(--spacing-sm));
@@ -201,26 +204,34 @@ body {
 }
 
 .primary-btn {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(139, 126, 200, 0.25);
 }
 
 .primary-btn:hover,
 .primary-btn:focus {
-  background-color: #0D47A1;
-  outline: 3px solid var(--focus-color);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(139, 126, 200, 0.35);
+  outline: 2px solid var(--focus-color);
   outline-offset: 2px;
 }
 
 .secondary-btn {
-  background-color: var(--secondary-color);
-  color: white;
+  background: var(--card-background);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 2px 6px rgba(139, 126, 200, 0.1);
 }
 
 .secondary-btn:hover,
 .secondary-btn:focus {
-  background-color: #1B5E20;
-  outline: 3px solid var(--focus-color);
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 126, 200, 0.25);
+  outline: 2px solid var(--focus-color);
   outline-offset: 2px;
 }
 
@@ -330,7 +341,7 @@ body {
 
 .secondary-action-btn {
   min-height: var(--touch-target-min);
-  background: white;
+  background: var(--card-background);
   border: 2px solid var(--border-color);
   border-radius: 12px;
   color: var(--text-color);
@@ -344,14 +355,16 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   padding: var(--spacing-sm);
+  box-shadow: 0 1px 4px rgba(139, 126, 200, 0.08);
 }
 
 .secondary-action-btn:hover,
 .secondary-action-btn:focus {
   border-color: var(--primary-color);
-  background: rgba(21, 101, 192, 0.05);
-  outline: 3px solid var(--focus-color);
+  background: rgba(139, 126, 200, 0.08);
+  outline: 2px solid var(--focus-color);
   outline-offset: 2px;
+  box-shadow: 0 4px 12px rgba(139, 126, 200, 0.15);
 }
 
 /* Mobile Action Grid */
@@ -365,7 +378,7 @@ body {
 }
 
 .action-card {
-  background: white;
+  background: var(--card-background);
   border: 2px solid var(--border-color);
   border-radius: 16px;
   padding: var(--spacing-md);
@@ -378,27 +391,28 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
+  box-shadow: 0 2px 8px rgba(139, 126, 200, 0.1);
 }
 
 .action-card.primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, #1976D2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
   color: white;
   border-color: transparent;
-  box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 126, 200, 0.3);
 }
 
 .action-card:hover,
 .action-card:focus {
   transform: translateY(-2px);
   border-color: var(--primary-color);
-  box-shadow: 0 6px 16px rgba(21, 101, 192, 0.2);
+  box-shadow: 0 6px 16px rgba(139, 126, 200, 0.2);
   outline: 2px solid var(--focus-color);
   outline-offset: 2px;
 }
 
 .action-card.primary:hover,
 .action-card.primary:focus {
-  box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
+  box-shadow: 0 6px 20px rgba(139, 126, 200, 0.4);
 }
 
 .action-card .action-icon {
@@ -445,10 +459,10 @@ body {
 }
 
 .time-block {
-  background: white;
+  background: var(--card-background);
   border-radius: 16px;
   padding: var(--spacing-md);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(139, 126, 200, 0.08);
   border: 1px solid var(--border-color);
 }
 
