@@ -53,9 +53,9 @@
                     <div class="action-text">Weekly View</div>
                 </button>
                 
-                <button id="view-history-btn" class="action-card" aria-describedby="history-help">
+                <button id="view-records-btn" class="action-card" aria-describedby="records-help">
                     <div class="action-icon">📊</div>
-                    <div class="action-text">History</div>
+                    <div class="action-text">Records</div>
                 </button>
                 
                 <button id="manage-meds-btn" class="action-card" aria-describedby="manage-help">
@@ -165,21 +165,92 @@
         </main>
     </div>
 
-    <!-- History Screen -->
-    <div id="history" class="screen">
-        <header class="app-header">
-            <button id="back-from-history" class="back-btn" aria-label="Go back to main menu">
+    <!-- Records Screen -->
+    <div id="records" class="screen">
+        <header class="records-header">
+            <button id="back-from-records" class="back-btn" aria-label="Go back to main menu">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                 </svg>
-                Back
             </button>
-            <h1>Medication History</h1>
+            <h1>Check your records at a glance</h1>
         </header>
 
         <main class="main-content">
-            <div id="history-list" class="history-container">
-                <!-- History entries will be populated here -->
+            <div class="records-card">
+                <div class="records-card-header">
+                    <h2>Record</h2>
+                    <div class="record-actions">
+                        <button class="action-icon" aria-label="Share">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                            </svg>
+                        </button>
+                        <button class="action-icon user-icon" aria-label="User">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            <span>Me</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="month-navigation">
+                    <div class="month-info">
+                        <h3 id="current-month">March</h3>
+                        <p class="adherence-subtitle">Monthly adherence</p>
+                    </div>
+                    <div class="month-nav-buttons">
+                        <button id="prev-month" class="nav-btn" aria-label="Previous month">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                            </svg>
+                        </button>
+                        <button id="next-month" class="nav-btn" aria-label="Next month">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="day-header">SUN</div>
+                        <div class="day-header">MON</div>
+                        <div class="day-header">TUE</div>
+                        <div class="day-header">WED</div>
+                        <div class="day-header">THU</div>
+                        <div class="day-header">FRI</div>
+                        <div class="day-header">SAT</div>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid">
+                        <!-- Calendar days will be populated here -->
+                    </div>
+                </div>
+
+                <div class="adherence-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot adherence-100"></span>
+                        <span class="legend-text">100%</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot adherence-90"></span>
+                        <span class="legend-text">90%</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot adherence-50"></span>
+                        <span class="legend-text">50%</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot adherence-0"></span>
+                        <span class="legend-text">0%</span>
+                    </div>
+                </div>
+
+                <button id="view-details-btn" class="view-details-btn">
+                    View details
+                </button>
             </div>
         </main>
     </div>
@@ -294,7 +365,7 @@
     <!-- Hidden Help Text for Screen Readers -->
     <div id="add-med-help" class="sr-only">Tap to add a new medication with reminders</div>
     <div id="upcoming-help" class="sr-only">View your medication schedule for the upcoming week</div>
-    <div id="history-help" class="sr-only">View your medication history and records</div>
+    <div id="records-help" class="sr-only">View your medication records and adherence calendar</div>
     <div id="manage-help" class="sr-only">Manage your existing medications</div>
 
     <script src="script.js?v=16"></script>

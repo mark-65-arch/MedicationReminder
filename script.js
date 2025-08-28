@@ -815,9 +815,9 @@ class MedicationApp {
             this.initializeUpcomingSchedule();
         });
         
-        addListener('view-history-btn', 'click', () => {
-            this.showScreen('history');
-            this.renderHistory();
+        addListener('view-records-btn', 'click', () => {
+            this.showScreen('records');
+            this.renderRecords();
         });
         
         // Add manage medications button handler
@@ -834,7 +834,7 @@ class MedicationApp {
             this.showScreen('main-menu');
         });
         
-        addListener('back-from-history', 'click', () => {
+        addListener('back-from-records', 'click', () => {
             this.showScreen('main-menu');
         });
         
@@ -1110,6 +1110,134 @@ class MedicationApp {
             "'": '&#039;'
         };
         return text.replace(/[&<>"']/g, (m) => map[m]);
+    }
+
+    // Records Screen Calendar Functionality
+    renderRecords() {
+        this.currentMonth = new Date();
+        this.renderCalendar();
+        this.setupRecordsEventListeners();
+    }
+
+    setupRecordsEventListeners() {
+        const addListener = (id, event, handler) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.removeEventListener(event, handler);
+                element.addEventListener(event, handler);
+            }
+        };
+
+        addListener('prev-month', 'click', () => {
+            this.currentMonth.setMonth(this.currentMonth.getMonth() - 1);
+            this.renderCalendar();
+        });
+
+        addListener('next-month', 'click', () => {
+            this.currentMonth.setMonth(this.currentMonth.getMonth() + 1);
+            this.renderCalendar();
+        });
+
+        addListener('view-details-btn', 'click', () => {
+            this.showToast('Detailed view coming soon!', 'info');
+        });
+    }
+
+    renderCalendar() {
+        this.updateMonthDisplay();
+        this.generateCalendarDays();
+    }
+
+    updateMonthDisplay() {
+        const monthElement = document.getElementById('current-month');
+        if (monthElement) {
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            monthElement.textContent = monthNames[this.currentMonth.getMonth()];
+        }
+    }
+
+    generateCalendarDays() {
+        const calendarGrid = document.getElementById('calendar-grid');
+        if (!calendarGrid) return;
+
+        const year = this.currentMonth.getFullYear();
+        const month = this.currentMonth.getMonth();
+        
+        // Get first day of the month and last day
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const startDate = new Date(firstDay);
+        startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+        const days = [];
+        const today = new Date();
+        
+        // Generate 42 days (6 weeks * 7 days) for complete calendar view
+        for (let i = 0; i < 42; i++) {
+            const currentDate = new Date(startDate);
+            currentDate.setDate(startDate.getDate() + i);
+            
+            const dayNumber = currentDate.getDate();
+            const isCurrentMonth = currentDate.getMonth() === month;
+            const isToday = currentDate.toDateString() === today.toDateString();
+            
+            // Calculate adherence for this day
+            const adherence = this.calculateDayAdherence(currentDate);
+            const adherenceClass = this.getAdherenceClass(adherence);
+            
+            let dayClasses = ['calendar-day'];
+            if (!isCurrentMonth) dayClasses.push('other-month');
+            if (isToday) dayClasses.push('today');
+            if (adherenceClass) dayClasses.push(adherenceClass);
+
+            days.push(`
+                <button class="${dayClasses.join(' ')}" data-date="${currentDate.toISOString()}">
+                    ${dayNumber}
+                </button>
+            `);
+        }
+
+        calendarGrid.innerHTML = days.join('');
+    }
+
+    calculateDayAdherence(date) {
+        const dateString = date.toDateString();
+        
+        // Count total scheduled medications for this day
+        let totalScheduled = 0;
+        let totalTaken = 0;
+
+        this.medications.forEach(medication => {
+            medication.times.forEach(time => {
+                totalScheduled++;
+                
+                // Check if this medication was taken on this day
+                const wasTaken = this.history.some(entry => 
+                    entry.medicationId === medication.id &&
+                    entry.scheduledTime === time &&
+                    entry.date === dateString &&
+                    entry.action === 'taken'
+                );
+                
+                if (wasTaken) {
+                    totalTaken++;
+                }
+            });
+        });
+
+        if (totalScheduled === 0) return null;
+        return (totalTaken / totalScheduled) * 100;
+    }
+
+    getAdherenceClass(adherence) {
+        if (adherence === null) return '';
+        if (adherence >= 100) return 'adherence-100';
+        if (adherence >= 90) return 'adherence-90';
+        if (adherence >= 50) return 'adherence-50';
+        return 'adherence-0';
     }
 }
 
