@@ -41,13 +41,13 @@ class MedicationApp {
             }
         }
         
-        // Simulate loading time for better UX
+        // Quick loading transition with multiple fallbacks
         setTimeout(() => {
-            console.log('Switching to main menu...');
-            this.showScreen('main-menu');
-            
-            // Try to update date safely
+            console.log('App initialized, switching to main menu...');
             try {
+                this.showScreen('main-menu');
+                
+                // Update date
                 const dateElement = document.getElementById('current-date');
                 if (dateElement) {
                     const now = new Date();
@@ -58,19 +58,25 @@ class MedicationApp {
                         day: 'numeric' 
                     });
                 }
-            } catch (e) {
-                console.log('Date update failed:', e);
-            }
-            
-            // Use basic medication rendering
-            try {
+                
+                // Render medications
                 this.renderMedications();
-            } catch (e) {
-                console.log('Medication rendering failed:', e);
+                this.checkNotificationPermission();
+                
+                console.log('App fully loaded and ready');
+            } catch (error) {
+                console.error('Error during app initialization:', error);
+                this.forceShowMainMenu();
             }
-            
-            this.checkNotificationPermission();
-        }, 500);
+        }, 100);
+        
+        // Additional fallback after 2 seconds
+        setTimeout(() => {
+            if (this.currentScreen === 'loading-screen') {
+                console.log('Fallback: Still on loading screen, forcing transition...');
+                this.forceShowMainMenu();
+            }
+        }, 2000);
     }
 
     // Data Management - Local Storage Only
@@ -146,24 +152,56 @@ class MedicationApp {
         if (textSizeSelect) textSizeSelect.value = this.settings.textSize;
     }
 
+    // Emergency fallback to force show main menu
+    forceShowMainMenu() {
+        console.log('Force showing main menu...');
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('main-menu').style.display = 'flex';
+        document.getElementById('main-menu').classList.add('active');
+        this.currentScreen = 'main-menu';
+        
+        // Try to update date
+        try {
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const now = new Date();
+                dateElement.textContent = now.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            }
+        } catch (e) {
+            console.log('Date update failed in fallback:', e);
+        }
+    }
+
     // Screen Navigation
     showScreen(screenId) {
+        console.log(`Switching to screen: ${screenId}`);
+        
         // Hide all screens
         document.querySelectorAll('.screen').forEach(screen => {
             screen.classList.remove('active');
+            screen.style.display = 'none';
         });
         
         // Show target screen
         const targetScreen = document.getElementById(screenId);
         if (targetScreen) {
             targetScreen.classList.add('active');
+            targetScreen.style.display = 'flex';
             this.currentScreen = screenId;
+            console.log(`Successfully showing screen: ${screenId}`);
             
             // Focus first interactive element for accessibility
             const firstFocusable = targetScreen.querySelector('button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
             if (firstFocusable) {
                 setTimeout(() => firstFocusable.focus(), 100);
             }
+        } else {
+            console.error(`Screen ${screenId} not found!`);
         }
     }
 
