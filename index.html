@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Senior Med Tracker</title>
-    <link rel="stylesheet" href="styles.css?v=15">
+    <link rel="stylesheet" href="styles.css?v=16">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1565C0">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231565C0'><path d='M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3V8zM4 6h5v2H4V6zm0 4h5v2H4v-2zm0 4h5v2H4v-2z'/></svg>">
@@ -142,19 +142,21 @@
             </div>
             
             <div class="week-navigation">
-                <button id="prev-week" class="week-nav-btn" aria-label="Previous week">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
-                    </svg>
-                    Previous
-                </button>
-                <span id="week-display" class="week-display">This Week</span>
-                <button id="next-week" class="week-nav-btn" aria-label="Next week">
-                    Next
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-                    </svg>
-                </button>
+                <div id="week-display" class="week-display">This Week</div>
+                <div class="week-nav-buttons">
+                    <button id="prev-week" class="week-nav-btn" aria-label="Previous week">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <button id="next-week" class="week-nav-btn" aria-label="Next week">
+                        Next
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             
             <div id="weekly-schedule" class="weekly-schedule">
@@ -295,6 +297,6 @@
     <div id="history-help" class="sr-only">View your medication history and records</div>
     <div id="manage-help" class="sr-only">Manage your existing medications</div>
 
-    <script src="script.js?v=15"></script>
+    <script src="script.js?v=16"></script>
 </body>
 </html>
