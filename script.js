@@ -907,8 +907,12 @@ class MedicationApp {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon" aria-hidden="true">💊</div>
-                    <h3>No Medications Added</h3>
-                    <p>Add medications to see your upcoming schedule here.</p>
+                    <h3>No Medications Added Yet</h3>
+                    <p>Add your medications first to see your weekly schedule.</p>
+                    <button onclick="app.showScreen('add-medication'); app.setupMedicationForm();" class="primary-btn" style="margin-top: var(--spacing-md);">
+                        <span class="btn-icon" aria-hidden="true">➕</span>
+                        Add Your First Medication
+                    </button>
                 </div>
             `;
             return;

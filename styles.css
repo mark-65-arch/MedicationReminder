@@ -927,10 +927,11 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
   background-color: var(--card-background);
-  border-radius: 12px;
-  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  border: 3px solid var(--primary-color);
+  box-shadow: 0 4px 12px rgba(21, 101, 192, 0.1);
 }
 
 .week-nav-btn {
@@ -957,10 +958,14 @@ body {
 }
 
 .week-display {
-  font-size: var(--heading-font-size);
+  font-size: 28px;
   font-weight: bold;
   color: var(--primary-color);
   text-align: center;
+  padding: var(--spacing-sm);
+  background-color: #E3F2FD;
+  border-radius: 12px;
+  min-width: 140px;
 }
 
 .weekly-schedule {
